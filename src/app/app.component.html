@@ -1,0 +1,6 @@
+<div *ngIf="isAuthenticated" class="container mt-5">
+  <app-exchange-rates></app-exchange-rates>
+</div>
+<div *ngIf="!isLoading && !isAuthenticated" class="container mt-5">
+  <app-login></app-login>
+</div>

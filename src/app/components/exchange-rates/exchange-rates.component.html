@@ -1,0 +1,85 @@
+<div class="container mt-4">
+  <div class="row-mb-3">
+    <div class="col text-center">
+      <h2 class="mb-4">Kursy Walut</h2>
+      <p *ngIf="lastUpdated" class="text-muted">
+        Ostatnia aktualizacja: {{ lastUpdated | date: 'short' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col d-flex justify-content-between">
+      <button class="btn btn-danger" (click)="logout()">Wyloguj się</button>
+      <div class="d-flex align-items-center">
+        <label for="interval" class="me-2 mb-0">Interwał odświeżania (w minutach):</label>
+        <input
+          id="interval"
+          type="number"
+          [(ngModel)]="intervalMinutes"
+          (change)="updateInterval(intervalMinutes)"
+          class="form-control"
+          style="width: 80px;"
+          min="1"
+          max="60"
+        />
+      </div>
+      <button class="btn btn-primary" (click)="refreshManually()">Odśwież</button>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="row" >
+    <div class="col">
+      <p class="alert alert-danger text-center">{{ errorMessage }}</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <table *ngIf="exchangeRates; else noRates" class="table table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Waluta</th>
+            <th>Kod</th>
+            <th>Kurs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let rate of paginatedRates">
+            <td>{{ rate.currency }}</td>
+            <td>{{ rate.code }}</td>
+            <td>{{ rate.rate | number: '1.4-4' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col text-center">
+      <nav *ngIf="totalPages > 1">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" (click)="goToPage(currentPage - 1)">Poprzednia</a>
+          </li>
+          <li
+            class="page-item"
+            *ngFor="let page of [].constructor(totalPages); let i = index"
+            [class.active]="currentPage === i + 1"
+          >
+            <a class="page-link" (click)="goToPage(i + 1)">{{ i + 1 }}</a>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a class="page-link" (click)="goToPage(currentPage + 1)">Następna</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+    <ng-template #noRates>
+      <div class="alert alert-info">
+        Aktualnie brak danych o kursach walut.
+      </div>
+    </ng-template>
+</div>

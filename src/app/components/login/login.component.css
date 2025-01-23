@@ -1,0 +1,15 @@
+.container {
+  height: 100%;
+}
+
+.card {
+  border-radius: 10px;
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  display: block;
+}
